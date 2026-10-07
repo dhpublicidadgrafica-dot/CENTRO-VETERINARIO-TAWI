@@ -1,0 +1,6 @@
+{
+  "name": "Centro Veterinario Tawi",
+  "description": "Centro Veterinario Tawi en Medellín. Atención veterinaria 24 horas, consulta, ecografía, vacunación, esterilización, profilaxis, peluquería canina y más.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

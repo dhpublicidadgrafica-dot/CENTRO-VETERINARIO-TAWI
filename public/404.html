@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title>Centro Veterinario Tawi</title>
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages and Static Hosts
+      // This script takes the current url and redirects to the index page with the path in query parameter 'p'
+      var pathSegmentsToKeep = 0;
+      var l = window.location;
+      var repoSegments = l.pathname.split('/').filter(Boolean);
+      // If deployed on github.io/<repo>/, repoSegments[0] is the repo name
+      var isGitHubPagesSubpath = l.hostname.indexOf('github.io') > -1 && repoSegments.length > 0;
+      var repoPath = isGitHubPagesSubpath ? '/' + repoSegments[0] : '';
+      var subPath = isGitHubPagesSubpath ? '/' + repoSegments.slice(1).join('/') : l.pathname;
+
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        repoPath + '/?p=' +
+        encodeURIComponent(subPath + l.search) +
+        l.hash
+      );
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

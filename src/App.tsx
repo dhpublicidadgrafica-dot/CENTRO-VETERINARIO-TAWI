@@ -16,10 +16,15 @@ const SEO_TITLES: Record<PageRoute, string> = {
 };
 
 function getRouteFromPath(path: string): PageRoute {
-  const cleanPath = path.toLowerCase().replace(/\/$/, '') || '/';
-  if (cleanPath === '/nosotros') return 'nosotros';
-  if (cleanPath === '/servicios') return 'servicios';
-  if (cleanPath === '/contacto') return 'contacto';
+  // Support query param redirection from 404.html (e.g. ?p=/servicios) and hash routing
+  const params = new URLSearchParams(window.location.search);
+  const redirectParam = params.get('p') || params.get('page');
+  const hash = window.location.hash.toLowerCase();
+
+  const combined = (redirectParam || path || hash || '').toLowerCase();
+  if (combined.includes('nosotros')) return 'nosotros';
+  if (combined.includes('servicios')) return 'servicios';
+  if (combined.includes('contacto')) return 'contacto';
   return 'inicio';
 }
 
@@ -45,16 +50,32 @@ export default function App() {
   const handleNavigate = (page: PageRoute) => {
     setCurrentPage(page);
     const newPath = getPathFromRoute(page);
-    if (window.location.pathname !== newPath) {
-      window.history.pushState({ page }, '', newPath);
+    try {
+      if (window.location.pathname !== newPath) {
+        window.history.pushState({ page }, '', newPath);
+      }
+    } catch {
+      // Fallback in sandboxes
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Sync document.title with SEO specifications
+  // Sync document.title with SEO specifications and clean redirect parameters
   useEffect(() => {
     document.title = SEO_TITLES[currentPage];
   }, [currentPage]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const redirectParam = params.get('p');
+    if (redirectParam) {
+      try {
+        window.history.replaceState(null, '', redirectParam);
+      } catch {
+        // Fallback
+      }
+    }
+  }, []);
 
   // Handle browser back and forward history buttons
   useEffect(() => {
